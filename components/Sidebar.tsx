@@ -1,5 +1,15 @@
 "use client";
-
+import {
+  LayoutDashboard,
+  Package,
+  ShoppingCart,
+  Users,
+  BarChart3,
+  FileText,
+  Settings,
+  UserPlus,
+  LogOut,
+} from "lucide-react";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -9,26 +19,55 @@ import { useAuth } from "@/hooks/useAuth";
 import { useLogout } from "@/hooks/useAuthQueries";
 
 const navItems = [
-  { label: "Overview", href: "/dashboard", roles: ["ADMIN", "USER"] },
+  {
+    label: "Overview",
+    href: "/dashboard",
+    icon: LayoutDashboard,
+    roles: ["ADMIN", "USER"],
+  },
   {
     label: "Inventory",
     href: "/dashboard/inventory",
     roles: ["ADMIN", "USER"],
+    icon: Package,
   },
-  { label: "Sales", href: "/dashboard/sales", roles: ["ADMIN", "USER"] },
+  {
+    label: "Sales",
+    href: "/dashboard/sales",
+    roles: ["ADMIN", "USER"],
+    icon: ShoppingCart,
+  },
+
   {
     label: "Customers",
     href: "/dashboard/customers",
     roles: ["ADMIN", "USER"],
+    icon: Users,
   },
   {
     label: "Analytics",
     href: "/dashboard/analytics",
     roles: ["ADMIN", "USER"],
+    icon: BarChart3,
   },
-  { label: "Reports", href: "/dashboard/reports", roles: ["ADMIN", "USER"] },
-  { label: "Settings", href: "/dashboard/settings", roles: ["ADMIN"] },
-  { label: "Register", href: "/dashboard/register", roles: ["ADMIN"] },
+  {
+    label: "Reports",
+    href: "/dashboard/reports",
+    roles: ["ADMIN", "USER"],
+    icon: FileText,
+  },
+  {
+    label: "Settings",
+    href: "/dashboard/settings",
+    roles: ["ADMIN"],
+    icon: Settings,
+  },
+  {
+    label: "Register",
+    href: "/dashboard/register",
+    roles: ["ADMIN"],
+    icon: UserPlus,
+  },
 ];
 
 export function Sidebar() {
@@ -82,12 +121,14 @@ export function Sidebar() {
                     <motion.div
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      className={`p-2 rounded-2xl transition-shadow hover:shadow-md ${
+                      className={`p-2 rounded-2xl transition-shadow flex items-center gap-3 hover:shadow-md ${
                         pathname === item.href
                           ? "bg-primary text-white"
                           : "text-gray-700"
                       }`}
                     >
+                      {" "}
+                      <item.icon className="h-5 w-5" />
                       {item.label}
                     </motion.div>
                   </Link>
@@ -97,10 +138,11 @@ export function Sidebar() {
 
           <Button
             onClick={() => logout()}
-            className="mt-auto bg-black cursor-pointer text-white"
+            className="mt-auto bg-black cursor-pointer text-white flex items-center gap-2"
             aria-label="Logout"
             disabled={isPending}
           >
+            <LogOut className="h-5 w-5" />
             {isPending ? "Logging out..." : "Logout"}
           </Button>
         </div>
