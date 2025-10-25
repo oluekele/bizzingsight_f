@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Product, Sale } from "@/types";
+import { Product } from "@/types";
 import { toast } from "react-hot-toast";
 
 const schema = z.object({

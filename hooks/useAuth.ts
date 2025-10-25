@@ -127,9 +127,17 @@ export const useAuth = () => {
     }
   };
 
-  const register = async (email: string, password: string) => {
+  const register = async (
+    email: string,
+    password: string,
+    fullNmae: string
+  ) => {
     try {
-      const { data } = await api.post("/auth/register", { email, password });
+      const { data } = await api.post("/auth/register", {
+        email,
+        password,
+        fullNmae,
+      });
       toast.success("Account created successfully");
       router.push("/");
     } catch (error: any) {

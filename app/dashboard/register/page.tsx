@@ -19,6 +19,7 @@ import { useAuth } from "@/hooks/useAuth";
 const schema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
+  fullName: z.string(),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -31,7 +32,8 @@ export default function Register() {
     return <div>Access Denied: Admin only</div>;
   }
 
-  const onSubmit = (data: FormData) => register(data.email, data.password);
+  const onSubmit = (data: FormData) =>
+    register(data.email, data.password, data.fullName);
 
   return (
     <motion.div
@@ -57,6 +59,23 @@ export default function Register() {
                       {...field}
                       placeholder="email@example.com"
                       aria-label="Email"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="fullName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Full Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder="Enter your full name"
+                      aria-label="fullName"
                     />
                   </FormControl>
                   <FormMessage />

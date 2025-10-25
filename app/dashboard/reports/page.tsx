@@ -16,6 +16,7 @@ export default function Reports() {
       link.click();
       toast.success("Report downloaded");
     } catch (error) {
+      console.error("Report download error:", error);
       toast.error("Failed to download report");
     }
   };
