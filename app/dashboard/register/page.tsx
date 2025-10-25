@@ -14,9 +14,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useLogin } from "@/hooks/useAuthQueries";
-import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 const schema = z.object({
   email: z.string().email(),
@@ -25,24 +23,15 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-export default function Login() {
+export default function Register() {
   const form = useForm<FormData>({ resolver: zodResolver(schema) });
-  const loginMutation = useLogin();
+  const { register, userRole } = useAuth();
 
-  const onSubmit = async (data: FormData) => {
-    loginMutation.mutate(data);
-  };
+  if (userRole !== "ADMIN") {
+    return <div>Access Denied: Admin only</div>;
+  }
 
-  const handleForgotPassword = () => {
-    const email = form.getValues("email");
-    if (!email) {
-      toast.error("Please enter your email first");
-    } else {
-      toast.info(`Password reset link will be sent to ${email}`);
-    }
-  };
-
-  const isLoading = loginMutation.isPending;
+  const onSubmit = (data: FormData) => register(data.email, data.password);
 
   return (
     <motion.div
@@ -53,7 +42,7 @@ export default function Login() {
     >
       <div className="p-8 rounded-2xl shadow-lg max-w-md w-full bg-white">
         <h2 className="text-2xl font-bold mb-6 text-center text-primary">
-          Sign In
+          Create Account
         </h2>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -68,7 +57,6 @@ export default function Login() {
                       {...field}
                       placeholder="email@example.com"
                       aria-label="Email"
-                      disabled={isLoading}
                     />
                   </FormControl>
                   <FormMessage />
@@ -87,33 +75,18 @@ export default function Login() {
                       {...field}
                       placeholder="********"
                       aria-label="Password"
-                      disabled={isLoading}
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
-            <Button disabled={isLoading} className="w-full bg-primary">
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Signing
-                  in...
-                </>
-              ) : (
-                "Sign In"
-              )}
-            </Button>
-
             <Button
-              type="button"
-              variant="link"
-              onClick={handleForgotPassword}
-              className="w-full text-primary"
-              disabled={isLoading}
+              type="submit"
+              className="w-full bg-primary"
+              aria-label="Register"
             >
-              Forgot Password?
+              Register
             </Button>
           </form>
         </Form>
